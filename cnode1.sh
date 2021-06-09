@@ -45,14 +45,15 @@ echo "* */1 * * * root /root/cashout${tCnt}.sh cashout-all 5 >> /root/cashout${t
 echo "*/3 * * * * root  /root/startbee${tCnt}.sh >> /root/startbee${tCnt}.log 2>&1 & "  >> /etc/crontab 
 sudo nohup bee start --config /root/node${tCnt}.yaml   > /root/nohup${tCnt}.out 2>&1 &
 sleep 30
-tar -czvpf /home/$ip-node${tCnt}-keys.tar.gz  /var/lib/bee/node${tCnt}/ --exclude /var/lib/bee/node*/localstore --exclude /var/lib/bee/node*/statestore
+tar -czvpf /home/$ip-node${tCnt}-keys.tar.gz  /var/lib/bee/node${tCnt}/ --exclude /var/lib/bee/node*/localstore 
 tar -czvpf /home$ip-bee${tCnt}-password.tar.gz  /var/lib/bee/ --exclude /var/lib/bee/node*
 /usr/local/bin/aws s3 cp /home/$ip-node${tCnt}-keys.tar.gz s3://node-backup-01/
 /usr/local/bin/aws s3 cp /home/$ip-bee${tCnt}-password.tar.gz  s3://node-backup-01/
 cat /var/lib/bee/node1/keys/swarm.key| jq -r '.address'
 ip=`curl icanhazip.com`
 addr=`cat /var/lib/bee/node${tCnt}/keys/swarm.key| jq -r '.address'`
-curl http://100.24.126.135:8000/bee/address/ip=$ip,node=${tCnt},address=0x$addr
+time=$(date "+%Y%m%d%H%M%S")
+curl http://100.24.126.135:8000/bee/address/time=$time,ip=$ip,node=${tCnt},address=0x$addr
 
 
 
