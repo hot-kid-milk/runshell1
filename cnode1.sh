@@ -2,7 +2,7 @@
 cntFile=".showcnt.txt"
 epFile="epFile.txt"
 if [ ! -f $cntFile ]; then
-
+continue
 fi
 if [ $# == 1 ]; then
 if [ $1 == "resetcnt" ]; then
